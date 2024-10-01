@@ -17,7 +17,8 @@ public class CreditsHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private long ClientId;
-    private int credits;
+    private int deudaTotal;
+    private int deudaActual;
     private LocalDate CreditsHistoryDate;
     //if State = False the credit is not page.
     private boolean State;

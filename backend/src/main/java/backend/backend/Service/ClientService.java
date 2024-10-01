@@ -25,8 +25,8 @@ public class ClientService {
      * @param salary    The client's salary.
      * @return The saved ClientEntity object.
      */
-    public ClientEntity createClient(String rut, String username, String password, String email, String firstName, String lastName, int age, int salary) {
-        ClientEntity client = new ClientEntity(rut, username, password, email, firstName, lastName, age, salary);
+    public ClientEntity createClient(String rut, String username, String password, String email, String firstName, String lastName, int age, int salary, int antiguedadLaboral) {
+        ClientEntity client = new ClientEntity(rut, username, password, email, firstName, lastName, age, salary, antiguedadLaboral);
         return clientRepository.save(client);
     }
 
@@ -62,7 +62,7 @@ public class ClientService {
 
     //condicion for credits
     public boolean R1 (String rut, double M){
-        ClientEntity client = getClient(rut);
+        ClientEntity client = clientRepository.findByRut(rut);
         int salary = client.getSalary();
 
         double result = (M/salary)*100;
@@ -70,7 +70,15 @@ public class ClientService {
         return !(result < 35);
     }
 
-
+    public boolean R6 (long id){
+        ClientEntity client = clientRepository.findById(id);
+        int age = client.getAge();
+        if(age > 70) {
+            return false;
+        }
+    
+        return true;
+    }
 }
 
 

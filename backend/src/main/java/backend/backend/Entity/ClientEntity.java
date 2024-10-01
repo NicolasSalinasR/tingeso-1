@@ -28,9 +28,10 @@ public class ClientEntity {
     private String lastName;
     private int age;
     private int salary;
+    private int antiguedadLaboral;
 
 
-    public ClientEntity(String rut, String username, String password, String email, String firstname, String lastname, int age,int salary) {
+    public ClientEntity(String rut, String username, String password, String email, String firstname, String lastname, int age,int salary, int antiguedadLaboral) {
         this.rut = rut;
         this.username = username;
         this.password = password;
@@ -39,5 +40,6 @@ public class ClientEntity {
         this.lastName = lastname;
         this.age = age;
         this.salary = salary;
+        this.antiguedadLaboral = antiguedadLaboral;
     }
 }

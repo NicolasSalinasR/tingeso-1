@@ -10,6 +10,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     ClientEntity findByEmail(String email);
     ClientEntity findByRut(String rut);
+    CLientEntity findById(long id);
 
 
 

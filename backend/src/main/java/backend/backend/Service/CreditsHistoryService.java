@@ -1,6 +1,8 @@
 package backend.backend.Service;
 
+import backend.backend.Entity.ClientEntity;
 import backend.backend.Entity.CreditsHistoryEntity;
+import backend.backend.Repository.ClientRepository;
 import backend.backend.Repository.CreditsHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,16 @@ public class CreditsHistoryService {
     @Autowired
     CreditsHistoryRepository creditsHistoryrepository;
 
-    private CreditsHistoryEntity add (long clientId, int credits, LocalDate CreditsHistoryDate, boolean State ) {
-        CreditsHistoryEntity creditsHistory = new CreditsHistoryEntity();
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    private CreditsHistoryEntity add (long clientId, int deudaTotal, int deudaActual, LocalDate CreditsHistoryDate, boolean State ) {
+        CreditsHistoryEntity creditsHistory = new CreditsHistoryEntity(clientId, deudaTotal, deudaActual , CreditsHistoryDate, State);
        return creditsHistoryrepository.save(creditsHistory);
     }
+
+    //historial crediticio cliente
 
     private boolean R2 (long clienteId){
         List<CreditsHistoryEntity> creditos = creditsHistoryrepository.findAllByClientId(clienteId);
@@ -32,6 +40,26 @@ public class CreditsHistoryService {
             } else { // Si state es false
                return false;
             }
+        }
+        return true;
+
+    }
+
+    //relacion deuda ingreso
+    public boolean R4 (long clientId, int newCredit){
+        List <CreditsHistoryEntity> credits = creditsHistoryrepository.findAllByClientId(clientId);
+        int suma = newCredit;
+        for(CreditsHistoryEntity credit : credits) {
+            int valor = credit.getDeudaActual();
+            suma = suma + valor;
+        }
+        ClientEntity client = clientRepository.findById(clientId);
+        int salary = client.getSalary();
+
+        double condicion =  salary /suma;
+
+        if (condicion < 0.5) {
+            return false;
         }
         return true;
 
