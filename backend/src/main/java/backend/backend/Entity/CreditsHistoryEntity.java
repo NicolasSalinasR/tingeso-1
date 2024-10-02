@@ -15,13 +15,22 @@ import java.time.LocalDate;
 public class CreditsHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private long ClientId;
+    private long id;
+
+    private long clientId;
     private int deudaTotal;
     private int deudaActual;
     private LocalDate CreditsHistoryDate;
     //if State = False the credit is not page.
     private boolean State;
+
+    public CreditsHistoryEntity(long ClientId, int deudaTotal, int deudaActual, LocalDate CreditsHistoryDate, Boolean State) {
+        this.clientId = ClientId;
+        this.deudaTotal = deudaTotal;
+        this.deudaActual = deudaActual;
+        this.CreditsHistoryDate = CreditsHistoryDate;
+        this.State = State;
+    }
 
 
 }

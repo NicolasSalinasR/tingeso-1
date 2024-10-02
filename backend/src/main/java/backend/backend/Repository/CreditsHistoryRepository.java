@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface CreditsHistoryRepository extends JpaRepository<CreditsHistoryEntity, Long> {
-   List<CreditsHistoryEntity> findAllByClientId(long clientId);
+
+
+   List<CreditsHistoryEntity> findAllByClientId(long ClientId);
    
 }

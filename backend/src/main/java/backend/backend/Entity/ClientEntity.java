@@ -21,7 +21,6 @@ public class ClientEntity {
     // id of the user.
     private Long id;
     private String rut;
-    private String username;
     private String email;
     private String password;
     private String firstName;
@@ -31,12 +30,11 @@ public class ClientEntity {
     private int antiguedadLaboral;
 
 
-    public ClientEntity(String rut, String username, String password, String email, String firstname, String lastname, int age,int salary, int antiguedadLaboral) {
+    public ClientEntity(String rut, String password, String email,String firstName, String lastname, int age,int salary, int antiguedadLaboral) {
         this.rut = rut;
-        this.username = username;
         this.password = password;
         this.email = email;
-        this.firstName = firstname;
+        this.firstName = firstName;
         this.lastName = lastname;
         this.age = age;
         this.salary = salary;

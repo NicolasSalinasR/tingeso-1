@@ -16,21 +16,21 @@ import java.util.Optional;
 
 public class CreditsHistoryService {
     @Autowired
-    CreditsHistoryRepository creditsHistoryrepository;
+    CreditsHistoryRepository creditsHistoryRepository;
 
 
     @Autowired
     private ClientRepository clientRepository;
 
-    private CreditsHistoryEntity add (long clientId, int deudaTotal, int deudaActual, LocalDate CreditsHistoryDate, boolean State ) {
+    private CreditsHistoryEntity add (int clientId, int deudaTotal, int deudaActual, LocalDate CreditsHistoryDate, boolean State ) {
         CreditsHistoryEntity creditsHistory = new CreditsHistoryEntity(clientId, deudaTotal, deudaActual , CreditsHistoryDate, State);
-       return creditsHistoryrepository.save(creditsHistory);
+       return creditsHistoryRepository.save(creditsHistory);
     }
 
     //historial crediticio cliente
 
-    private boolean R2 (long clienteId){
-        List<CreditsHistoryEntity> creditos = creditsHistoryrepository.findAllByClientId(clienteId);
+    private boolean R2 (long ClienteId){
+        List<CreditsHistoryEntity> creditos = creditsHistoryRepository.findAllByClientId(ClienteId);
 
 
         for (CreditsHistoryEntity credit : creditos) {
@@ -47,7 +47,7 @@ public class CreditsHistoryService {
 
     //relacion deuda ingreso
     public boolean R4 (long clientId, int newCredit){
-        List <CreditsHistoryEntity> credits = creditsHistoryrepository.findAllByClientId(clientId);
+        List <CreditsHistoryEntity> credits = creditsHistoryRepository.findAllByClientId(clientId);
         int suma = newCredit;
         for(CreditsHistoryEntity credit : credits) {
             int valor = credit.getDeudaActual();

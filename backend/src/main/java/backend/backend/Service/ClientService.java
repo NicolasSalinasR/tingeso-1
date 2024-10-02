@@ -5,6 +5,8 @@ import backend.backend.Repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 
 public class ClientService {
@@ -12,22 +14,13 @@ public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
-    /**
-     * Creates a new client entity with the provided details and saves it in the database.
-     *
-     * @param rut       The client's RUT (unique identifier).
-     * @param username  The client's username.
-     * @param password  The client's password.
-     * @param email     The client's email.
-     * @param firstName The client's first name.
-     * @param lastName  The client's last name.
-     * @param age       The client's age.
-     * @param salary    The client's salary.
-     * @return The saved ClientEntity object.
-     */
-    public ClientEntity createClient(String rut, String username, String password, String email, String firstName, String lastName, int age, int salary, int antiguedadLaboral) {
-        ClientEntity client = new ClientEntity(rut, username, password, email, firstName, lastName, age, salary, antiguedadLaboral);
+
+    public ClientEntity createClient(ClientEntity client) {
         return clientRepository.save(client);
+    }
+
+    public ClientEntity getClientById(long id) {
+        return clientRepository.findById(id);
     }
 
     /**
@@ -78,6 +71,18 @@ public class ClientService {
         }
     
         return true;
+    }
+
+
+        //P6
+    public Double totalCostP6 (int amount, int termYears, double annualInterest, double seguroDegrabacion, double seguroIncendio, double comisionAdministracion) {
+        int termMeses = termYears * 12;
+        double prestamomensual =  simulateLoanAmount(amount, termYears, annualInterest);
+        double seguroD =  seguroDegrabacion * amount;
+        double comision = comisionAdministracion * amount;
+        double totalCostMensual = prestamomensual + seguroIncendio + seguroD;
+        return (totalCostMensual * termMeses )+ comision;
+
     }
 }
 
