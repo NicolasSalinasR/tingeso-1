@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
@@ -19,11 +20,11 @@ public class HistoryCountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private int clientCountid;
+    private long clientid;
     // if is false is a retire of money and if is true is a deposit of money
     private boolean Type;
     private int Change;
-    private LocalDate ChangeDate;
+    private Timestamp ChangeDate;
 
 
 }

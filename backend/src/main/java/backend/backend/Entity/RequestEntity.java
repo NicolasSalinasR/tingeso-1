@@ -6,21 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
-@Table(name = "clientCount")
+@Table(name = "Request")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class CountEntity {
+public class RequestEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long clientId;
-    private int Money;
-    private LocalDate creationDate;
+    private String typeOfRequest;
+    private int Stage;
+    private long ClientId;
+    @Lob
+    private byte[] pdfDocument;
 
 
 }

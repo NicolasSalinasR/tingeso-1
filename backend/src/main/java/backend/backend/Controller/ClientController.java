@@ -4,8 +4,10 @@ package backend.backend.Controller;
 import backend.backend.Entity.ClientEntity;
 import backend.backend.Service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,31 +33,80 @@ public class ClientController {
         String lastName = body.get("lastname");
         int age = Integer.parseInt(body.get("age"));
         int salary = Integer.parseInt(body.get("salary"));
-        int antiguedad = Integer.parseInt(body.get("antiguedad"));
-        ClientEntity client = new ClientEntity(rut, password, email, firstName, lastName, age, salary, antiguedad);
+        int JobTenure = Integer.parseInt(body.get("JobTenure"));
+        boolean dicom = Boolean.parseBoolean(body.get("dicom"));
+        ClientEntity client = new ClientEntity(rut, password, email, firstName, lastName, age, salary, JobTenure, dicom);
 
         return clientService.createClient(client);
     }
 
-    @GetMapping("/simulateLoadAmount")
-    public double simulateLoadAmount(@RequestParam Map<String, String> body) {
-        int amount = Integer.parseInt(body.get("amount"));
-        int termYears = Integer.parseInt(body.get("termYears"));
-        double annualInterest = Double.parseDouble(body.get("annualInterest"));
-        return clientService.simulateLoanAmount(amount, termYears, annualInterest);
+    @PostMapping("/simulateLoanAmount")
+    public ResponseEntity<Integer> simulateLoanAmount(@RequestBody Map<String, String> body) {
+        try {
+            // Verificar que los parámetros están presentes
+            if (!body.containsKey("amount") || !body.containsKey("termYears") || !body.containsKey("annualInterest")) {
+                return ResponseEntity.badRequest().body(null); // Retorna un código 400 si falta algún parámetro
+            }
+
+            // Parsear los valores desde el JSON
+            int amount = Integer.parseInt(body.get("amount"));
+            int termYears = Integer.parseInt(body.get("termYears"));
+            double annualInterest = Double.parseDouble(body.get("annualInterest"));
+
+            // Llamar al servicio para calcular el préstamo
+            int result = clientService.simulateLoanAmount(amount, termYears, annualInterest);
+            return ResponseEntity.ok(result);
+
+        } catch (NumberFormatException e) {
+            // Manejar la excepción si los parámetros no son válidos
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    @GetMapping("/totalCost")
-    public double totalCost(@RequestParam Map<String, String> body) {
-        int amount = Integer.parseInt(body.get("amount"));
-        int termYears = Integer.parseInt(body.get("termYears"));
-        double annualInterest = Double.parseDouble(body.get("annualInterest"));
-        double seguroDegrabacion = Double.parseDouble(body.get("seguroDegrabacion"));
-        double seguroIncendio = Double.parseDouble(body.get("seguroIncendio"));
-        double comision = Double.parseDouble(body.get("comision"));
-        return clientService.totalCostP6(amount,termYears,annualInterest,seguroDegrabacion,seguroIncendio,comision);
+    @PostMapping("/totalCost")
+    public ResponseEntity<Integer> totalCost(@RequestBody Map<String, String> body) {
+        try {
+            // Parsear los valores desde el JSON
+            int amount = Integer.parseInt(body.get("amount"));
+            int termYears = Integer.parseInt(body.get("termYears"));
+            double annualInterest = Double.parseDouble(body.get("annualInterest"));
+            double seguroDegrabacion = Double.parseDouble(body.get("seguroDegrabacion"));
+            double seguroIncendio = Double.parseDouble(body.get("seguroIncendio"));
+            double comision = Double.parseDouble(body.get("comision"));
 
+            // Llamar al servicio para calcular el costo total
+            int result = clientService.totalCostP6(amount, termYears, annualInterest, seguroDegrabacion, seguroIncendio, comision);
+            return ResponseEntity.ok(result);
+
+        } catch (NumberFormatException e) {
+            // Manejar la excepción si los parámetros no son válidos
+            return ResponseEntity.badRequest().body(null);
+        }
     }
+
+    @PostMapping("/P4")
+    public ResponseEntity<List<Boolean>> P4(@RequestBody Map<String, String> body) {
+        try {
+            // Extraer parámetros del cuerpo de la solicitud
+            Long clientId = Long.parseLong(body.get("clientId"));
+            String rut = body.get("rut");
+            int type = Integer.parseInt(body.get("type"));
+            int cost = Integer.parseInt(body.get("cost"));
+            int loan = Integer.parseInt(body.get("loan"));
+            int debt = Integer.parseInt(body.get("debt"));
+            int amount = Integer.parseInt(body.get("amount"));
+            int M = Integer.parseInt(body.get("M"));
+            int older = Integer.parseInt(body.get("older"));
+
+            // Llamar al servicio con los parámetros
+            List<Boolean> result = clientService.Rcomplete(clientId, rut, type, cost, loan, debt, amount, M, older);
+            return ResponseEntity.ok(result);
+        } catch (NumberFormatException e) {
+            // Manejar la excepción si los parámetros no son válidos
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
 
 
 }

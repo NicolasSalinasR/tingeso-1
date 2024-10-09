@@ -19,7 +19,7 @@ public class ClientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // id of the user.
-    private Long id;
+    private long id;
     private String rut;
     private String email;
     private String password;
@@ -27,10 +27,11 @@ public class ClientEntity {
     private String lastName;
     private int age;
     private int salary;
-    private int antiguedadLaboral;
+    private int JobTenure;
+    private boolean Dicom;
 
 
-    public ClientEntity(String rut, String password, String email,String firstName, String lastname, int age,int salary, int antiguedadLaboral) {
+    public ClientEntity(String rut, String password, String email,String firstName, String lastname, int age,int salary, int JobTenure, boolean Dicom) {
         this.rut = rut;
         this.password = password;
         this.email = email;
@@ -38,6 +39,11 @@ public class ClientEntity {
         this.lastName = lastname;
         this.age = age;
         this.salary = salary;
-        this.antiguedadLaboral = antiguedadLaboral;
+        this.JobTenure = JobTenure;
+        this.Dicom = Dicom;
+    }
+
+    public boolean GetDicom() {
+        return Dicom;
     }
 }
