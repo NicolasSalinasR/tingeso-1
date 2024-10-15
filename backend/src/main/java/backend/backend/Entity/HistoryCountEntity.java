@@ -22,7 +22,6 @@ public class HistoryCountEntity {
     private long id;
     private long clientid;
     // if is false is a retire of money and if is true is a deposit of money
-    private boolean Type;
     private int Change;
     private Timestamp ChangeDate;
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -23,14 +24,12 @@ public class HistoryCountController {
     @PostMapping("/add")
     public HistoryCountEntity addHistoryCount(@RequestBody Map<String, String> body) {
         long clientid = Long.parseLong(body.get("clientid"));
-        boolean type = Boolean.parseBoolean(body.get("type"));
         int change = Integer.parseInt(body.get("change"));
-        Timestamp changeDate = Timestamp.valueOf(body.get("changeDate"));
+        Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now());
 
         // Crear la nueva instancia de HistoryCountEntity
         HistoryCountEntity historyCount = new HistoryCountEntity();
         historyCount.setClientid(clientid);
-        historyCount.setType(type);
         historyCount.setChange(change);
         historyCount.setChangeDate(changeDate);
 

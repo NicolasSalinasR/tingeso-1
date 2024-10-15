@@ -19,7 +19,10 @@ public class RequestEntity {
     private long id;
     private String typeOfRequest;
     private int Stage;
-    private long ClientId;
+    private long clientId;
+    private int Amount;
+    private int yearTerm;
+
     @Lob
     private byte[] pdfDocument;
 

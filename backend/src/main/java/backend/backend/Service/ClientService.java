@@ -54,17 +54,32 @@ public class ClientService {
         // Total number of months for the loan term
         int totalMonths = termYears * 12;
         // Calculate the monthly rate + 1 for the amortization formula
-        double monthlyRatePlusOne = monthlyRate + 1;
+        float monthlyRatePlusOne = (float) (monthlyRate + 1);
+
+        System.out.println("yo deberia ser 0.00375 " + monthlyRate);
+        System.out.println("yo deberia ser 240 " + totalMonths);
 
         // Power term for the amortization formula
-        double powerTerm = Math.pow(monthlyRatePlusOne, totalMonths);
+        float powerTerm = (float) Math.pow(monthlyRatePlusOne, totalMonths);
+
+
+
+
         // Numerator of the formula
-        double numerator = monthlyRate * powerTerm;
+        double numerator = (monthlyRate * powerTerm);
+        System.out.println("yo deberia ser: 0.0092079989" +numerator);
+
         // Denominator of the formula
         double denominator = powerTerm - 1;
 
+
+
         // Return the calculated monthly payment amount
-        double N =  amount * (numerator / denominator);
+        double D =   (numerator / denominator);
+
+        System.out.println("yo deberia ser: 0.0063264938 " + D);
+
+        double N = amount * D;
         int J = (int) N;
         return J;
     }
@@ -102,13 +117,16 @@ public class ClientService {
     /**
      * R1: Determines if a client is eligible for a loan based on their salary and the loan amount.
      *
-     * @param rut The RUT of the client.
+     * @param Id The RUT of the client.
      * @param M   The loan amount.
      * @return true if the loan amount does not exceed 35% of the client's salary.
      */
-    public boolean R1(String rut, int M) {
+    public boolean R1(long Id, int amount, int termYears, double annualInterest) {
+        int M = simulateLoanAmount( amount, termYears,  annualInterest);;
+
+
         // Retrieve client by RUT
-        ClientEntity client = clientRepository.findByRut(rut);
+        ClientEntity client = clientRepository.findById(Id);
         // Get client's salary
         int salary = client.getSalary();
 
@@ -241,13 +259,13 @@ public class ClientService {
         return true;
     }
 
-    public List<Boolean> Rcomplete (Long ClientId, String rut, int type, int cost, int loan, int debt, int amount,int M, int older){
+    public List<Boolean> Rcomplete (Long ClientId, int type,  int loan, int debt, int amount, int older, int termYears, double annualInterest) {
         List<Boolean> ListReturn = new ArrayList<Boolean>();
-        boolean ResultR1 = R1(rut, M);
+        boolean ResultR1 = R1(ClientId,  amount,  termYears, annualInterest);
         boolean ResultR2 = R2(ClientId);
         boolean ResultR3 = R3(ClientId);
         boolean ResultR4 = R4(ClientId,debt,amount);
-        boolean ResultR5 = R5(type,cost,loan);
+        boolean ResultR5 = R5(type,amount,loan);
         boolean ResultR6 = R6(ClientId);
         boolean ResultR7 = historyCountService.R7Complete(ClientId,older,amount);
         ListReturn.add(ResultR1);

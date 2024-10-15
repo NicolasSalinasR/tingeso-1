@@ -27,6 +27,8 @@ public class RequestController {
     public ResponseEntity<RequestEntity> createRequest(
             @RequestParam("typeOfRequest") String typeOfRequest,
             @RequestParam("stage") int stage,
+            @RequestParam("Amount") int Amount,
+            @RequestParam("termYears") int termYears,
             @RequestParam("clientId") long clientId,
             @RequestParam("pdfFile") MultipartFile pdfFile) {
         try {
@@ -34,7 +36,7 @@ public class RequestController {
             byte[] pdfData = pdfFile.getBytes();
 
             // Crear la entidad de solicitud
-            RequestEntity request = requestService.createRequest(typeOfRequest, stage, clientId, pdfData);
+            RequestEntity request = requestService.createRequest(typeOfRequest, stage, Amount, termYears, clientId, pdfData);
 
             return new ResponseEntity<>(request, HttpStatus.CREATED);
         } catch (IOException e) {
@@ -45,7 +47,7 @@ public class RequestController {
     @PutMapping("/updateStage")
     public ResponseEntity<String> updateStage(@RequestBody Map<String, String> body
           ) {
-        Long ClientId= Long.parseLong(body.get("ClientId"));
+        long ClientId= Long.parseLong(body.get("ClientId"));
         int Stage= Integer.parseInt(body.get("Stage"));
 
         try {
@@ -70,14 +72,21 @@ public class RequestController {
         }
     }
 
-  //  @GetMapping("/getAll/{clientId}")
-  //  public ResponseEntity<List<RequestEntity>> getAllByClientId(@PathVariable("clientId") long clientId) {
-  //      List<RequestEntity> requests = requestService.getAllByClientId(clientId);
-  //      if (requests.isEmpty()) {
-  //          return ResponseEntity.noContent().build(); // Devuelve un 204 No Content si no hay resultados
-  //      }
-  //      return ResponseEntity.ok(requests); // Devuelve un 200 OK con la lista de solicitudes
- //   }
+    @PostMapping("/getAll/ClientId")
+    public ResponseEntity<List<RequestEntity>> getAllByClientId(@RequestBody Map<String, String> body) {
+        Long ClientId= Long.parseLong(body.get("ClientId"));
+        List<RequestEntity> requests = requestService.GetAllRequestsByClientId(ClientId);
+        if (requests.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Devuelve un 204 No Content si no hay resultados
+        }
+        return ResponseEntity.ok(requests); // Devuelve un 200 OK con la lista de solicitudes
+    }
+
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<RequestEntity>> getAll() {
+        return ResponseEntity.ok(requestService.GetAllRequests());
+    }
 
 
 

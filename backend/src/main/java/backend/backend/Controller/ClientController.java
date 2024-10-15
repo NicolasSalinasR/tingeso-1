@@ -33,7 +33,18 @@ public class ClientController {
         String lastName = body.get("lastname");
         int age = Integer.parseInt(body.get("age"));
         int salary = Integer.parseInt(body.get("salary"));
-        int JobTenure = Integer.parseInt(body.get("JobTenure"));
+        int JobTenure = 0;
+        try {
+            String JobTenure1 = body.get("jobTenure");
+            if (JobTenure1 == null || JobTenure1.isEmpty()) {
+            }else {
+                JobTenure = Integer.parseInt(JobTenure1);
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        }
+
+        //  int JobTenure = Integer.parseInt(body.get("JobTenure"));
         boolean dicom = Boolean.parseBoolean(body.get("dicom"));
         ClientEntity client = new ClientEntity(rut, password, email, firstName, lastName, age, salary, JobTenure, dicom);
 
@@ -89,17 +100,17 @@ public class ClientController {
         try {
             // Extraer parámetros del cuerpo de la solicitud
             Long clientId = Long.parseLong(body.get("clientId"));
-            String rut = body.get("rut");
+
             int type = Integer.parseInt(body.get("type"));
-            int cost = Integer.parseInt(body.get("cost"));
             int loan = Integer.parseInt(body.get("loan"));
             int debt = Integer.parseInt(body.get("debt"));
             int amount = Integer.parseInt(body.get("amount"));
-            int M = Integer.parseInt(body.get("M"));
             int older = Integer.parseInt(body.get("older"));
+            int termYears = Integer.parseInt(body.get("termYears"));
+            double annualInterest = Double.parseDouble(body.get("annualInterest"));
 
             // Llamar al servicio con los parámetros
-            List<Boolean> result = clientService.Rcomplete(clientId, rut, type, cost, loan, debt, amount, M, older);
+            List<Boolean> result = clientService.Rcomplete(clientId, type, loan, debt, amount, older, termYears, annualInterest);
             return ResponseEntity.ok(result);
         } catch (NumberFormatException e) {
             // Manejar la excepción si los parámetros no son válidos
