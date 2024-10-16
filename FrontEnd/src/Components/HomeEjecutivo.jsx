@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import requestService from '../Service/Request.service';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate para la navegación
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
 
 const HomeEjecutivo = () => {
   const navigate = useNavigate();
@@ -22,60 +31,81 @@ const HomeEjecutivo = () => {
     fetchAllRequests(); // Obtener todas las solicitudes cuando el componente se monta
   }, []);
 
-  return (
-    <div className="container mt-5 d-flex justify-content-center">
-      <div className="w-75">
-        <h2 className="text-center mb-4">Todas las Solicitudes</h2>
-        {requests.length > 0 ? (
-          <table className="table table-bordered table-hover table-striped text-center">
-            <thead className="thead-dark">
-              <tr>
-                <th>Id</th>
-                <th>ClientId</th>
-                <th>Stage</th>
-                <th>Amount</th>
-                <th>Year Term</th>
-                <th>Acciones</th> {/* Nueva columna para los botones de acción */}
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((request) => (
-                <tr key={request.id}>
-                  <td>{request.id}</td>
-                  <td>{request.clientId}</td>
-                  <td>{request.stage}</td>
-                  <td>{request.amount}</td>
-                  <td>{request.yearTerm}</td>
-                  <td>
-                    <button 
-                      className="btn btn-primary btn-sm" 
-                      onClick={() => navigate('/Ejecutivo/Request/Update')}
-                    >
-                      Actualizar la solicitud
-                    </button>
+  const handleUpdateRequest = (request) => {
+    navigate('/Ejecutivo/Request/Update', { 
+      state: { 
+        id: request.id, // Enviar el id al estado
+        clientId: request.clientId, 
+        stage: request.stage // Enviar también el stage si deseas mostrarlo
+      } 
+    });
+  };
+  
+  const handleCheckConditions = (request) => {
+    navigate('/Ejecutivo/Request/Conditions', { 
+      state: { 
+        clientId: request.clientId, 
+        amount: request.amount, 
+        yearTerm: request.yearTerm 
+      } 
+    });
+  };
 
-                    <button 
-                      className="btn btn-danger btn-sm"
-                      onClick={() => navigate('/Ejecutivo/Request/Conditions', { 
-                        state: { 
-                          clientId: request.clientId, 
-                          amount: request.amount, 
-                          yearTerm: request.yearTerm 
-                        } 
-                      })}
-                    >
-                      Comprobar condiciones para la solicitud
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-center">No se encontraron solicitudes.</p>
-        )}
-      </div>
-    </div>
+
+
+  return (
+    <TableContainer component={Paper} className="container mt-5 d-flex justify-content-center">
+      <br />
+      <h2 className="text-center mb-4">Todas las Solicitudes</h2>
+      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left" sx={{ fontWeight: "bold" }}>Id</TableCell>
+            <TableCell align="left" sx={{ fontWeight: "bold" }}>ClientId</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>Stage</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>Amount</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>Year Term</TableCell>
+            <TableCell align="left" sx={{ fontWeight: "bold" }}>Operaciones</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {requests.map((request) => (
+            <TableRow
+              key={request.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell align="left">{request.id}</TableCell>
+              <TableCell align="left">{request.clientId}</TableCell>
+              <TableCell align="right">{request.stage}</TableCell>
+              <TableCell align="right">{request.amount}</TableCell>
+              <TableCell align="right">{request.yearTerm}</TableCell>
+              <TableCell>
+              <Button
+                variant="contained"
+                color="info"
+                size="small"
+                onClick={() => handleUpdateRequest(request)} // Pasar el id al hacer clic en el botón
+                style={{ marginLeft: "0.5rem" }}
+                startIcon={<EditIcon />}
+              >
+                 Actualizar
+              </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={() => handleCheckConditions(request)}
+                  style={{ marginLeft: "0.5rem" }}
+                  startIcon={<CheckIcon />}
+                >
+                  Comprobar Condiciones
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

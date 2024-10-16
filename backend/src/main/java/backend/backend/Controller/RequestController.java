@@ -47,7 +47,7 @@ public class RequestController {
     @PutMapping("/updateStage")
     public ResponseEntity<String> updateStage(@RequestBody Map<String, String> body
           ) {
-        long ClientId= Long.parseLong(body.get("ClientId"));
+        long ClientId= Long.parseLong(body.get("Id"));
         int Stage= Integer.parseInt(body.get("Stage"));
 
         try {

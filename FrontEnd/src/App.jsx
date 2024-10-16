@@ -32,7 +32,7 @@ function App() {
         <Route path="/client/Request" element={<ClientRequest />} />
         <Route path="/client/Follow" element={<ClientFollow />} />
         <Route path="/Ejecutivo/Request/Conditions" element={< EjecutivoRequestConditions/>} />
-        <Route path="Ejecutivo/Request/Update" element={< EjecutivoRequestUpdate/>} />
+        <Route path="/Ejecutivo/Request/Update" element={< EjecutivoRequestUpdate/>} />
 
 
 

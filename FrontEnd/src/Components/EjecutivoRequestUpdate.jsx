@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RequestService from "../Service/Request.service";
+import { useLocation } from "react-router-dom"; // Importa useLocation para acceder al estado
 
 const UpdateStageForm = () => {
-    // Estados para ClientId y Stage
-    const [clientId, setClientId] = useState('');
-    const [stage, setStage] = useState('');
+    const location = useLocation(); // Obtener el estado pasado
+    const { id, clientId, stage: initialStage } = location.state; // Extraer el id, clientId y el stage inicial del estado
+    const [stage, setStage] = useState(initialStage || ''); // Inicializar el estado del stage con el valor recibido
     const [message, setMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            // Crear el cuerpo del request, asegurando que los valores sean cadenas
             const body = {
-                ClientId: clientId.toString(),  // Convertir el ClientId a cadena
-                Stage: stage.toString(),        // Convertir el Stage a cadena
+                Id: id.toString(), // Asegúrate de incluir el id en el cuerpo
+                Stage: stage.toString(),
             };
 
-            // Llamar al servicio para actualizar el Stage
             const response = await RequestService.updateStage(body);
-            setMessage(response.data); // Mostrar mensaje de éxito
+            setMessage(response.data);
         } catch (error) {
             if (error.response && error.response.status === 404) {
                 setMessage('Request not found!');
@@ -34,12 +33,22 @@ const UpdateStageForm = () => {
             <h2>Actualizar Etapa de la Solicitud</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>ID del Cliente:</label>
+                    <label>ID del Cliente: (Auto)</label>
                     <input 
                         type="number" 
                         className="form-control" 
                         value={clientId} 
-                        onChange={(e) => setClientId(e.target.value)} 
+                        readOnly // Hacer el campo de ID de cliente solo lectura
+                        required 
+                    />
+                </div>
+                <div className="form-group">
+                    <label>ID de la Solicitud: (Auto)</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        value={id} 
+                        readOnly // Hacer el campo de ID de solicitud solo lectura
                         required 
                     />
                 </div>
